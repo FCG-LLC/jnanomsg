@@ -155,7 +155,7 @@
 
 (defn- resolve-symbols
   []
-  (into {} (for [[k v] (Nanomsg/nn_symbols)]
+  (into {} (for [[^String k v] (Nanomsg/nn_symbols)]
              [(keyword (.toLowerCase k)) v])))
 
 (def ^{:doc "Get all symbols"}

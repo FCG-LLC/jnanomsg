@@ -207,6 +207,7 @@ public interface Socket {
   // void setRecvTimeout(final int ms);
 
   void setSocketOpt(SocketOption type, Object value);
+  Object getSocketOpt(SocketOption type);
 
   public static Socket create(SocketType type) {
     return create(type, Domain.AF_SP);

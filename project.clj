@@ -1,10 +1,9 @@
-(defproject jnanomsg "0.4.3"
+(defproject cs/jnanomsg "0.4.4"
   :description "Nanomsg library for Java & Clojure"
   :url "https://github.com/niwibe/jnanomsg"
   :license {:name "Apache 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0.txt"}
-  :dependencies [[org.clojure/clojure "1.7.0" :scope "provided"]
-                 [funcool/octet "0.2.0" :scope "provided"]
+  :dependencies [[org.clojure/clojure "1.8.0" :scope "provided"]
                  [net.java.dev.jna/jna "4.2.1"]]
 
   :jvm-opts ["-server" "-Xmx2g" "-XX:+UseG1GC"]
@@ -17,14 +16,15 @@
                  :package-names ["nanomsg" "nanomsg.jna" "nanomsg.pubsub" "nanomsg.exceptions"
                                  "nanomsg.reqrep" "nanomsg.bus" "nanomsg.pair" "nanomsg.pipeline"]}
 
+  :global-vars {*warn-on-reflection* true}
   :codeina {:target "doc/api/clojure"
             :reader :clojure
             :src-uri "http://github.com/niwibe/jnanomsg/blob/master/"
             :src-uri-prefix "#L"
-            :exclude [nanomsg.benchmark nanomsg.impl]}
+            :exclude [nanomsg.impl]}
 
   :profiles {:dev {:plugins [[lein-javadoc "0.1.1"]
                              [lein-ancient "0.6.7"]
                              [funcool/codeina "0.3.0"]]
-                   :main nanomsg.benchmark}
+                   :main nanomsg.core}
              :uberjar {:aot :all}})
