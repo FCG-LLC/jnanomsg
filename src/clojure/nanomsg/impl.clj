@@ -14,7 +14,6 @@
            nanomsg.Device
            nanomsg.Poller
            nanomsg.async.AsyncSocket
-           nanomsg.async.IAsyncCallback
            java.nio.ByteBuffer
            clojure.lang.Keyword
            clojure.lang.IFn))
@@ -88,7 +87,15 @@
     (.recv socket blocking))
   (-send [socket data blocking]
     (let [data (p/-byte-buffer data)]
-      (.send socket data blocking))))
+      (.send socket data blocking)))
+  (-send-timeout [socket]
+    (.getSocketOpt socket nanomsg.Nanomsg$SocketOption/NN_SNDTIMEO))
+  (-send-timeout! [socket ^long timeout]
+    (.setSocketOpt socket nanomsg.Nanomsg$SocketOption/NN_SNDTIMEO (int timeout)))
+  (-recv-timeout [socket]
+    (.getSocketOpt socket nanomsg.Nanomsg$SocketOption/NN_RCVTIMEO))
+  (-recv-timeout! [socket ^long timeout]
+    (.setSocketOpt socket nanomsg.Nanomsg$SocketOption/NN_RCVTIMEO (int timeout))))
 
 (extend-type Poller
   p/IPoller

@@ -82,6 +82,26 @@
      (doto buffer .mark (.get data) .reset)
      (String. data "UTF-8"))))
 
+(defn send-timeout
+  "Get send timeout of the socket"
+  [^Socket socket]
+  (p/-send-timeout socket))
+
+(defn send-timeout!
+  "Set send timeout of the socket"
+  [^Socket socket ^long timeout]
+  (p/-send-timeout! socket timeout))
+
+(defn recv-timeout
+  "Get recv timeout of the socket"
+  [^Socket socket]
+  (p/-recv-timeout socket))
+
+(defn recv-timeout!
+  "Set recv timeout of the socket"
+  [^Socket socket ^long timeout]
+  (p/-recv-timeout! socket timeout))
+
 (defn close!
   "Close socket."
   [^java.io.Closeable socket]
@@ -140,3 +160,4 @@
 
 (def ^{:doc "Get all symbols"}
   symbols (memoize resolve-symbols))
+

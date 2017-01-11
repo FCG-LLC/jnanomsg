@@ -35,9 +35,6 @@ public abstract class AbstractSocket implements Socket {
   public AbstractSocket(final Domain domain, final SocketType protocol) {
     this.fd = nn_socket(domain.value(), protocol.value());
     this.open = true;
-
-    this.setSocketOpt(SocketOption.NN_SNDTIMEO, 600);
-    this.setSocketOpt(SocketOption.NN_RCVTIMEO, 600);
   }
 
   public synchronized void close() throws IOException {
@@ -217,11 +214,11 @@ public abstract class AbstractSocket implements Socket {
   }
 
   public int getRcvFd() throws IOException {
-    return getSocketFd(SocketOption.NN_RCVFD);
+    return getSocketIntOpt(SocketOption.NN_RCVFD);
   }
 
   public int getSndFd() throws IOException {
-    return getSocketFd(SocketOption.NN_SNDFD);
+    return getSocketIntOpt(SocketOption.NN_SNDFD);
   }
 
   /**
@@ -229,7 +226,7 @@ public abstract class AbstractSocket implements Socket {
    *
    * @return file descriptor.
    */
-  private synchronized int getSocketFd(SocketOption opt) throws IOException {
+  private synchronized int getSocketIntOpt(SocketOption opt) throws IOException {
     final int flag = opt.value();
     final IntByReference fd = new IntByReference();
     final IntByReference size_t = new IntByReference(Native.SIZE_T_SIZE);
@@ -321,6 +318,31 @@ public abstract class AbstractSocket implements Socket {
     if (rc < 0) {
       Nanomsg.handleError(rc);
     }
+  }
+
+  public Object getSocketOpt(SocketOption type){
+    int rc = 0;
+
+    final int socket_level = OptionLevel.NN_SOL_SOCKET.value();
+
+    switch(type) {
+    case NN_LINGER:
+    case NN_SNDBUF:
+    case NN_RCVBUF:
+    case NN_RCVMAXSIZE:
+    case NN_SNDTIMEO:
+    case NN_RCVTIMEO:
+    case NN_RECONNECT_IVL:
+    case NN_RECONNECT_IVL_MAX:
+    case NN_SNDPRIO:
+    case NN_RCVPRIO:
+    case NN_IPV4ONLY:
+      return getSocketIntOpt(type);
+
+    default:
+      throw new RuntimeException("Socket option not supported.");
+    }
+
   }
 
 }
