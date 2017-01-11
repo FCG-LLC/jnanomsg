@@ -20,6 +20,7 @@
            nanomsg.Device
            nanomsg.Poller
            java.nio.ByteBuffer
+           java.util.EnumSet
            clojure.lang.Keyword))
 
 (declare bind!)
@@ -61,14 +62,14 @@
 (defn send!
   "Send data through given socket."
   ([socket data]
-   (send! socket data true))
+   (send! socket data (EnumSet/noneOf nanomsg.Nanomsg$SocketFlag)))
   ([socket data blocking]
    (p/-send socket data blocking)))
 
 (defn recv!
   "Receive data through given socket."
   ([socket]
-   (recv! socket true))
+   (recv! socket (EnumSet/noneOf nanomsg.Nanomsg$SocketFlag)))
   ([socket blocking]
    (p/-recv socket blocking)))
 
